@@ -1,20 +1,23 @@
 import { Helmet } from "react-helmet-async";
 // @mui
-import { Button, Container, Divider, Stack, Typography } from "@mui/material";
+import { Button, Card, Container, Divider, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 // hooks
-import useResponsive from "../hooks/useResponsive";
 // components
 import Iconify from "../components/iconify";
-import Logo from "../components/logo";
+
 // sections
-import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 // import { Redirect } from 'react-router-dom';
-import { Link, useNavigate } from "react-router-dom";
-import { login } from "../actions/auth";
-import { LoginForm } from "../sections/auth/login";
+import { useFormik } from "formik";
 import { connect } from "react-redux";
+import { Link, Navigate } from "react-router-dom";
+import * as Yup from "yup";
+import { loginDjango } from "../api/user";
+import fondo from "../assets/buildings.jpg";
+import { StyledSectionComponent } from "../components/common/StyledSection";
+import { useAuth } from "../hooks";
+import { LoginForm } from "../sections/auth/login";
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled("div")(({ theme }) => ({
@@ -23,15 +26,7 @@ const StyledRoot = styled("div")(({ theme }) => ({
   },
 }));
 
-const StyledSection = styled("div")(({ theme }) => ({
-  width: "100%",
-  maxWidth: 480,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
-}));
+
 
 const StyledContent = styled("div")(({ theme }) => ({
   maxWidth: 480,
@@ -45,88 +40,73 @@ const StyledContent = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const LoginPage = ({ login,isAuthenticated }) => {
-  const navigate = useNavigate();
-  const mdUp = useResponsive("up", "md");
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+const LoginPage = () => {
+
+  
+  const { login } = useAuth();
+
+  const captcha = useRef(null)
+  const [tokenRc, setToken] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+  const formik = useFormik({
+    // Initializa los valores del formulario con los valores iniciales proporcionados por la función initialValues
+    initialValues: initialValues(),
+    // Establece la validación del esquema utilizando Yup, si se proporciona un objeto  se utiliza un esquema de actualización, de lo contrario se utiliza un esquema nuevo
+    validationSchema: Yup.object(validationSchema()),
+    
+    onSubmit: async (formValue) => {
+      try {
+       
+         // Si hace una apeticion en caso de que retone valores se envia a la funcion login
+        const response = await loginDjango(formValue);
+        const { access } = response;
+        const token = access;
+
+        login(token);
+        setRedirect(true);
+        
+        
+      } catch (error) {
+        console.log(error);
+      }
+    },
   });
 
-  const { email, password } = formData;
-
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
- 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    console.log("2");
-    await login(email, password);
-    // handleClick();
-  };
-
-  const continueWithGoogle = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}/google`
-      );
-
-      window.location.replace(res.data.authorization_url);
-    } catch (err) {}
-  };
-
-  const continueWithFacebook = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/auth/o/facebook/?redirect_uri=${process.env.REACT_APP_API_URL}/facebook`
-      );
-
-      window.location.replace(res.data.authorization_url);
-    } catch (err) {}
-  };
-
-  if (isAuthenticated) {
-    navigate("/dashboard", { replace: true });
+  if (redirect) {
+    return <Navigate to="/" />;
   }
-
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Login </title>
       </Helmet>
 
-      <StyledRoot>
-        <Logo
-          sx={{
-            position: "fixed",
-            top: { xs: 16, sm: 24, md: 40 },
-            left: { xs: 16, sm: 24, md: 40 },
-          }}
-        />
+      <StyledRoot
+      
+      sx={{
+        backgroundImage: `url(${fondo})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        <StyledSectionComponent messages="¡Hola, bienvenido!" />
 
-        {mdUp && (
-          <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hola bienvenido
-            </Typography>
-            <img
-              src="/assets/illustrations/illustration_login.png"
-              alt="login"
-            />
-          </StyledSection>
-        )}
-
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" >
           <StyledContent>
+          <Card
+          sx={{
+            p: 5,
+            width: 1,
+            maxWidth: 420,
+          }}
+        >
             <Typography variant="h4" gutterBottom>
               Inicia session
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               No tienes una cuenta? {""}
-              <Link variant="subtitle2" to="/signup">
-                <Link to="/signup">Registrate</Link>
+              <Link variant="subtitle2" to="/signup/:edificio/:email">
+                <Link to="/signup/:edificio/:email">Registrate</Link>
               </Link>
             </Typography>
 
@@ -140,23 +120,7 @@ const LoginPage = ({ login,isAuthenticated }) => {
                 />
               </Button>
 
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify
-                  icon="eva:facebook-fill"
-                  color="#1877F2"
-                  width={22}
-                  height={22}
-                />
-              </Button>
-
-              <Button fullWidth size="large" color="inherit" variant="outlined">
-                <Iconify
-                  icon="eva:twitter-fill"
-                  color="#1C9CEA"
-                  width={22}
-                  height={22}
-                />
-              </Button>
+      
             </Stack>
 
             <Divider sx={{ my: 3 }}>
@@ -166,13 +130,12 @@ const LoginPage = ({ login,isAuthenticated }) => {
             </Divider>
 
             <LoginForm
-              onChange={onChange}
-              onSubmit={onSubmit}
-              email={email}
-              password={password}
+              formik={formik}
             />
+            </Card>
           </StyledContent>
         </Container>
+        
       </StyledRoot>
     </>
   );
@@ -181,4 +144,18 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 
 })
-export default connect(mapStateToProps, { login })(LoginPage);
+export default connect(mapStateToProps, { })(LoginPage);
+
+
+function initialValues() {
+  return {
+    email: "",
+    password: "",
+  };
+}
+function validationSchema() {
+  return {
+    email: Yup.string().email(true).required(true),
+    password: Yup.string().required(true),
+  };
+}

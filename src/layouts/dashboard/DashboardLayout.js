@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { checkAuthenticated, load_user } from '../../actions/auth';
 // ----------------------------------------------------------------------
 import Nav from './nav';
+import LoginPage from "../../Pages/LoginPage";
+import { useAuth } from "../../hooks";
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
 
@@ -35,10 +37,12 @@ const Main = styled('div')(({ theme }) => ({
 
 const DashboardLayout = ({ checkAuthenticated, load_user})  => {
   const [open, setOpen] = useState(false);
+  const { auth } = useAuth();
   useEffect(() => {
     checkAuthenticated();
     load_user();
 }, []);
+if (!auth) return <LoginPage/>;
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />

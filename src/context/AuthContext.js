@@ -12,6 +12,7 @@ export const AuthContext = createContext({
 });
 
 export function AuthProvider(props) {
+  console.log("llega")
   const { children } = props;
   const [auth, setAuth] = useState(undefined);
   const { getMe } = useUser();
@@ -30,8 +31,9 @@ export function AuthProvider(props) {
   }, []);
 
   const login = async (token) => {
-    
     //lo setea por medio de la funcion setToken que se encuentra en api
+    console.log("login")
+    
     setToken(token);
     const me = await getMe(token);
     setAuth({ token, me });

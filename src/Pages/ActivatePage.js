@@ -1,103 +1,122 @@
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
 // @mui
-import { Button, Container, Divider, Stack, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
-// hooks
-import useResponsive from '../hooks/useResponsive';
+import {
+  Card,
+  Container,
+  Typography
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useFormik } from "formik";
 // components
-import Iconify from '../components/iconify';
-import Logo from '../components/logo';
+import Logo from "../components/logo";
 // sections
-import { useState } from 'react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import { Redirect } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { LoginForm } from '../sections/auth/activate';
+import fondo from "../assets/buildings.jpg";
+import { StyledSectionComponent } from "../components/common/StyledSection";
+import { LoginForm } from "../sections/auth/activate";
+import { useUsers } from "../hooks/UsersHooks/useUsers";
 // ----------------------------------------------------------------------
+import { useParams } from "react-router-dom";
 
-const StyledRoot = styled('div')(({ theme }) => ({
-  [theme.breakpoints.up('md')]: {
-    display: 'flex',
+const StyledRoot = styled("div")(({ theme }) => ({
+  [theme.breakpoints.up("md")]: {
+    display: "flex",
   },
 }));
 
-const StyledSection = styled('div')(({ theme }) => ({
-  width: '100%',
-  maxWidth: 480,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  boxShadow: theme.customShadows.card,
-  backgroundColor: theme.palette.background.default,
-}));
 
-const StyledContent = styled('div')(({ theme }) => ({
+
+const StyledContent = styled("div")(({ theme }) => ({
   maxWidth: 480,
-  margin: 'auto',
-  minHeight: '100vh',
-  display: 'flex',
-  justifyContent: 'center',
-  flexDirection: 'column',
+  margin: "auto",
+  minHeight: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  flexDirection: "column",
   padding: theme.spacing(12, 0),
 }));
 
-
 export default function ActivatePage() {
+  const navigate = useNavigate();
+  const { UsersActivateUser }= useUsers();
+  const [redirect, setRedirect] = useState(false);
+  const { uid, token } = useParams();
 
-  const mdUp = useResponsive('up', 'md');
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '' 
-});
-const { email, password } = formData;
-const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-const onSubmit = e => {
-    e.preventDefault();
 
-};
+  const formik = useFormik({
+    initialValues: initialValues(),
+    onSubmit: async (formValue) => {
+      formValue.uid = uid;
+      formValue.token = token;
+      console.log("aqui")
+      try {
+        // Si hace una apeticion en caso de que retone valores se envia a la funcion login
+        UsersActivateUser(formValue);
+        setRedirect(true);
+      } catch (error) {
+       console.log(error);
+      }
+    },
+  });
+  if (redirect) {
+    navigate("/dashboard", { replace: true });
+  }
+
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Activate </title>
       </Helmet>
 
-      <StyledRoot>
+      <StyledRoot
+        sx={{
+          backgroundImage: `url(${fondo})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <Logo
           sx={{
-            position: 'fixed',
+            position: "fixed",
             top: { xs: 16, sm: 24, md: 40 },
             left: { xs: 16, sm: 24, md: 40 },
           }}
         />
 
-        {mdUp && (
-          <StyledSection>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
-            </Typography>
-            <img src="/assets/illustrations/illustration_login.png" alt="login" />
-          </StyledSection>
-        )}
+        <StyledSectionComponent messages={"Gracias por registrarte"} />
 
         <Container maxWidth="sm">
           <StyledContent>
-            <Typography variant="h4" gutterBottom>
-              Activate
-            </Typography>
+            <Card
+              sx={{
+                p: 5,
+                width: 1,
+                maxWidth: 420,
+              }}
+            >
+              <Typography variant="h4" gutterBottom>
+                Activa tu cuenta
+              </Typography>
 
-            <Typography variant="body2" sx={{ mb: 5 }}>
-              Don’t have an account? {''}
-              <Link variant="subtitle2" to='/signup'><Link to='/signup'>Sign Up</Link></Link>
               
-            </Typography>
 
-
-            
-
-            <LoginForm onChange={onChange} onSubmit={onSubmit} email={email} password={password} />
+              <LoginForm
+                formik={formik}
+                
+              />
+            </Card>
           </StyledContent>
         </Container>
       </StyledRoot>
     </>
-  )
+  );
+}
+function initialValues() {
+  return {
+    uid: "",
+    token: "",
+  };
 }

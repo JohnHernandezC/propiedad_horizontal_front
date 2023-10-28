@@ -11,7 +11,7 @@ import {
   Avatar,
   Stack,
 } from "@mui/material";
-import account from "../../../_mock/account";
+
 import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/scrollbar";
@@ -19,6 +19,8 @@ import NavSection from "../../../components/nav-section";
 import navConfig from "./config";
 import { connect } from "react-redux";
 import { logout } from "../../../actions/auth";
+import { useAuth } from "../../../hooks";
+import user from '../../../assets/abstract-user.png';
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
@@ -37,34 +39,7 @@ const Nav = ({ openNav, onCloseNav, logout, isAuthenticated }) => {
   const { pathname } = useLocation();
   const isDesktop = useResponsive("up", "lg");
   const [redirect, setRedirect] = useState(false);
-
-  const logout_user = () => {
-    logout();
-    setRedirect(true);
-  };
-
-  const guestLinks = () => (
-    <Fragment>
-      <li className="nav-item">
-        <Link className="nav-link" to="/login">
-          Login
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/signup">
-          Sign Up
-        </Link>
-      </li>
-    </Fragment>
-  );
-
-  const authLinks = () => (
-    <li className="nav-item">
-      <a className="nav-link" href="#!" onClick={logout_user}>
-        Logout
-      </a>
-    </li>
-  );
+  const { auth } = useAuth();
 
   useEffect(() => {
     if (openNav) {
@@ -72,6 +47,37 @@ const Nav = ({ openNav, onCloseNav, logout, isAuthenticated }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+/* Si el usuario no está autenticado, se redirige a la página de inicio de sesión */
+  
+  // const logout_user = () => {
+  //   logout();
+  //   setRedirect(true);
+  // };
+
+  // const guestLinks = () => (
+  //   <Fragment>
+  //     <li className="nav-item">
+  //       <Link className="nav-link" to="/login">
+  //         Login
+  //       </Link>
+  //     </li>
+  //     <li className="nav-item">
+  //       <Link className="nav-link" to="/signup">
+  //         Sign Up
+  //       </Link>
+  //     </li>
+  //   </Fragment>
+  // );
+
+  // const authLinks = () => (
+  //   <li className="nav-item">
+  //     <a className="nav-link" href="#!" onClick={logout_user}>
+  //       Logout
+  //     </a>
+  //   </li>
+  // );
+
+  
 
   const renderContent = (
     <Scrollbar
@@ -91,15 +97,21 @@ const Nav = ({ openNav, onCloseNav, logout, isAuthenticated }) => {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
-
+            {/* <Avatar src={account.photoURL} alt="photoURL" /> */}
+            {auth?.me?.foto ? (
+        <Avatar src={auth?.me?.foto} alt="photoURL" />
+      ) : (
+        <Avatar src={user} alt="Default Photo" />
+      )}
+        
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {account.displayName}
+                {/* {account.displayName} */}
+                {auth?.me?.nombres} {auth?.me?.apellidos}
               </Typography>
 
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {account.role}
+                {auth?.me?.is_admin ? "Administrador" : "Usuario"}
               </Typography>
             </Box>
           </StyledAccount>
@@ -110,7 +122,7 @@ const Nav = ({ openNav, onCloseNav, logout, isAuthenticated }) => {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
+      {/* <Box sx={{ px: 2.5, pb: 3, mt: 10 }}>
         <Stack
           alignItems="center"
           spacing={3}
@@ -120,7 +132,7 @@ const Nav = ({ openNav, onCloseNav, logout, isAuthenticated }) => {
               {isAuthenticated ? authLinks() : guestLinks()}
            
         </Stack>
-      </Box>
+      </Box> */}
     </Scrollbar>
   );
 

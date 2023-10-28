@@ -13,7 +13,7 @@ const BASE_URL = `${BASE_API_PUBLIC}/`;
     */
 export async function loginDjango(formValue) {
   try {
-    const url = `${BASE_API_PUBLIC}/login/`;
+    const url = `${BASE_API_PUBLIC}/auth/jwt/create/`;
     const params = {
       method: "POST",
       headers: {
@@ -26,6 +26,7 @@ export async function loginDjango(formValue) {
     if (response.status !== 200) {
       throw new Error(result.error);
     }
+    console.log(result);
     return result;
   } catch (error) {
     throw error;
@@ -36,7 +37,7 @@ export async function loginDjango(formValue) {
 //toma el token para hacer una peticion
 export async function getMeApi(token) {
   try {
-    const url = `${BASE_API_PUBLIC}/usuarios/auth/me/`;
+    const url = `${BASE_API_PUBLIC}/auth/users/me/`;
     const params = {
       headers: {
         Authorization: `Bearer ${token}`,

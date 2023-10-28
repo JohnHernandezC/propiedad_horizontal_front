@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
-import account from '../../../_mock/account';
-
+import { useAuth } from "../../../hooks";
+import user from '../../../assets/abstract-user.png';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -26,11 +26,11 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-
+  const { auth, logout } = useAuth();
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
-
+console.log(auth)
   const handleClose = () => {
     setOpen(null);
   };
@@ -54,7 +54,12 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+       {auth?.me?.foto ? (
+        <Avatar src={auth?.me?.foto} alt="photoURL" />
+      ) : (
+        <Avatar src={user} alt="Default Photo" />
+      )}
+        
       </IconButton>
 
       <Popover
@@ -78,10 +83,12 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {/* {account.displayName} */}
+            {auth?.me?.nombres}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {/* {account.email} */}
+            {auth?.me?.email}
           </Typography>
         </Box>
 
@@ -97,7 +104,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={logout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </Popover>

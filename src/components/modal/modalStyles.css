@@ -1,0 +1,38 @@
+/* modalStyles.css */
+.custom-modal {
+  .ant-modal-content {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .ant-modal-header {
+    background-color: #cc302b; /* Rojo Persa */
+    border-bottom: none;
+    padding: 16px 24px;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .ant-modal-title {
+    font-size: 25px;
+    color: #ffffff; /* Blanco */
+  }
+
+  .ant-modal-body {
+    padding: 24px;
+    background-color: #ffffff; /* Blanco */
+    color: #444444; /* Ónice */
+  }
+
+  .ant-modal-footer {
+    background-color: #f0f2f5; /* Gris X-11 */
+    border-top: none;
+    padding: 16px 24px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .ant-btn {
+    background-color: #081926; /* Jet */
+    color: #ffffff; /* Blanco */
+    border: none;
+  }
+}

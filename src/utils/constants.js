@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 
 export const BASE_API = "http://192.168.50.220:9006/r"
-export const BASE_API_PUBLIC = "http://192.168.50.220:9006"
+export const BASE_API_PUBLIC = "http://127.0.0.1:8000"
 
 
 // export const BASE_API = "https://syzapiback.syzapi.com/r"
