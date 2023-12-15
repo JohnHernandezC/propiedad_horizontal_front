@@ -56,7 +56,7 @@ export async function getMeApi(token) {
 
 // Función para agregar un nuevo dato
 export async function getUsersApi(token) {
-  const url = `${BASE_URL}usuarios/user_partial`;
+  const url = `${BASE_URL}auth/users`;
   return makeRequest(url, "GET",token);
 }
 
@@ -68,7 +68,7 @@ export async function CambioPasswordApi(id, data, token) {
 
 // Función para agregar un nuevo dato
 export async function getUsersAdminApi(token) {
-  const url = `${BASE_URL}usuarios/usuarioI`;
+  const url = `${BASE_URL}auth/users`;
   return makeRequest(url, "GET",token);
 }
 
@@ -95,7 +95,7 @@ export async function addUserApi(data, token) {
     formData.append("is_active", data.is_active);
     formData.append("is_superuser", data.is_superuser);
 
-  const url = `${BASE_URL}usuarios/usuarioI/`;
+  const url = `${BASE_URL}auth/users/`;
   return makeRequestFormData(url, "POST", token, formData);
 }
 
@@ -162,7 +162,7 @@ export async function addUserAdminApi(data, token) {
     formData.append("is_active", data.is_active);
     formData.append("is_superadmin", data.is_superadmin);
 
-  const url = `${BASE_URL}usuarios/usuarioI/`;
+  const url = `${BASE_URL}auth/users/`;
   return makeRequestFormData(url, "POST", token, formData);
 }
 
@@ -191,13 +191,13 @@ export async function updateUserAdminApi(id, data, token) {
   formData.append("is_superadmin", data.is_superadmin);
   formData.append("is_staff", data.is_staff);
 
-  const url = `${BASE_URL}usuarios/usuarioI/${id}/`;
+  const url = `${BASE_URL}auth/users/${id}/`;
   return makeRequestFormData(url, "PATCH", token, formData);
 }
 
 
 // Función para eliminar 
 export async function deleteUserAdminApi(id, token) {
-  const url = `${BASE_URL}usuarios/usuarioI/${id}/`;
+  const url = `${BASE_URL}auth/users/${id}/`;
   return makeRequest(url, "DELETE", token);
 }

@@ -19,14 +19,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold', // Hace que el título sea más visible
     fontSize: '1.5rem', // Cambia el tamaño del título
   },
-  addButton: {
-    backgroundColor: '#808080', // Cambia el color del botón a gris
-    '&:hover': {
-      backgroundColor: '#606060', // Cambia el color de fondo en el hover
-    },
-    color: 'white', // Cambia el color del texto a blanco
-    fontWeight: 'bold', // Hace que el texto del botón sea más visible
-  },
+  
 }));
 
 export function HeaderPage(props) {
@@ -42,9 +35,15 @@ export function HeaderPage(props) {
         {title}
       </Typography>
       {btnClick && btnTitle && (
-        <Button
+          <Button
           variant="contained"
-          className={classes.addButton}
+          sx={{
+            backgroundColor: "#ff8207", // Orange
+            color: "#fcfcfc", // White
+            "&:hover": {
+              backgroundColor: "#231d1e", // Dark gray on hover
+            },
+          }}
           startIcon={<AddIcon />}
           onClick={btnClick}
           size={buttonSize}

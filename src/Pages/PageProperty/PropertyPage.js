@@ -6,18 +6,36 @@ import { CustomTable } from "../../components/common/Table";
 import { ModalBasic } from "../../components/modal/ModalBasic";
 import { usePropiedades } from "../../hooks/PropiedadesHooks/usePropiedades";
 import { HeaderPage } from "../HeaderPage";
+import { CheckCircle, Cancel } from '@mui/icons-material';
 import AddEditForm from "./components/AddEditForm";
 
 const Columns = [
-    { id: 'tipo_propiedad', label: 'Tipo propiedad' },
-    { id: 'num_propiedad', label: 'Número de Propiedad' },
-    { id: 'torre', label: 'Torre' },
-    { id: 'coeficiente', label: 'Coeficiente' },
-    { id: 'cant_parqueadero', label: 'Cantidad de Parqueaderos' },
-    { id: 'fecha_resgistro', label: 'Fecha de Registro' },
-    { id: 'estado', label: 'Estado' },
-    { id: 'privado', label: 'Privado' }
-  ];
+  { id: 'tipo_propiedad', label: 'Tipo propiedad' },
+  { id: 'num_propiedad', label: 'Número de Propiedad' },
+  { id: 'torre', label: 'Torre' }, // Agrega las columnas adicionales según tu modelo
+  { id: 'piso', label: 'Piso' },
+  { id: 'coeficiente', label: 'Coeficiente' },
+  { id: 'cant_parqueadero', label: 'Cantidad de Parqueaderos' },
+  { id: 'cedula', label: 'Cédula' },
+  { id: 'nombre', label: 'Nombre' },
+  { id: 'usuario_email', label: 'Email del Usuario' },
+
+  
+  { id: "privado", label: "Privado", render: (value) => (
+    value ? (
+      <CheckCircle color="primary" />
+    ) : (
+      <Cancel color="error" />
+    )
+  )},
+  { id: "estado", label: "Estado", render: (value) => (
+    value ? (
+      <CheckCircle color="primary" />
+    ) : (
+      <Cancel color="error" />
+    )
+  )},
+];
 
 
 export default function PropertyPage() {

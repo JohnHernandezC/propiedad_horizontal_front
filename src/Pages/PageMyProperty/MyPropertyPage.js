@@ -5,7 +5,7 @@ import {
   Grid,
   Switch,
   Typography,
-  CardActions
+  CardActions,
 } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useCallback, useEffect, useState } from "react";
@@ -41,7 +41,8 @@ export default function MyPropertyPage() {
   const [titleModal, setTitleModal] = useState(null);
   const [contentModal, setContentModal] = useState(null);
   const [refetch, setRefetch] = useState(false);
-  const { loading, Propiedades, getMiPropiedades } = usePropiedades();
+  const { loading, Propiedades, getMiPropiedades, updatePropiedades } =
+    usePropiedades();
 
   const openCloseModal = useCallback(() => setShowModal((prev) => !prev), []);
   const onRefetch = useCallback(() => setRefetch((prev) => !prev), []);
@@ -53,9 +54,9 @@ export default function MyPropertyPage() {
   const handleEditEstado = (propiedadId, estado) => {
     // Aquí puedes implementar la lógica para actualizar el estado de la propiedad en el backend.
     // Luego, puedes refrescar la lista de propiedades llamando a `onRefetch()`.
-    // updatePropiedadEstado(propiedadId, estado).then(() => onRefetch());
+    updatePropiedades(propiedadId, estado).then(() => onRefetch());
   };
-  console.log(Propiedades);
+
   return (
     <>
       <Helmet>
@@ -122,7 +123,6 @@ export default function MyPropertyPage() {
                           Tipo de Propiedad:{" "}
                           {getTipoPropiedad(propiedad.tipo_propiedad)}
                         </Typography>
-
                         <Typography
                           component="div"
                           sx={{ marginBottom: "8px" }}

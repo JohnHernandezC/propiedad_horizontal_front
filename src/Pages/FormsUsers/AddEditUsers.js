@@ -110,7 +110,6 @@ export default function AddEditUsers(props) {
 function initialValues(data) {
   return {
     usuario_email: data?.usuario_email || "",
-    id_edificio: data?.id_edificio || 0, // Cambia 0 al valor por defecto que desees
     id_propiedad: data?.id_propiedad || 0, // Cambia 0 al valor por defecto que desees
     estado: data?.estado || false,
     tipo_registro: data?.tipo_registro || "", 

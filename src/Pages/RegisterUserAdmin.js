@@ -16,7 +16,7 @@ const Columns = [
   { id: 'tipo_registro', label: 'Tipo' },
   { id: 'estado', label: 'Estado' },
   { id: 'fecha_registro', label: 'Fecha Registro' },
-  // { id: 'fecha_activacion', label: 'Fecha Active' },
+  
 ];
 
 export default function RegisterUserAdmin() {
