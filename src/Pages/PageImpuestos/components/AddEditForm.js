@@ -1,26 +1,24 @@
-import { useEffect } from "react";
-import * as Yup from "yup";
 import {
   Button,
+  Checkbox,
+  FormControlLabel,
   Grid,
   TextField,
-  FormControlLabel,
-  Checkbox,
+  Autocomplete
 } from "@mui/material";
 import { useFormik } from "formik";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers";
-import { useVisitantes } from "src/hooks/VisitantesHooks/useVisitantes";
-import { usePropiedades } from "../../../hooks/PropiedadesHooks/usePropiedades";
+import { useEffect } from "react";
+import { useImpuestos } from "src/hooks/ImpuestosHooks/useImpuestos";
+import * as Yup from "yup";
+
 
 
 export default function AddEditForm(props) {
   const { onClose, onRefetch, Data } = props;
-  const { updateVisitantes, addVisitantes } = useVisitantes();
-  const { PropiedadesDB, getPropiedadesDB } = usePropiedades();
+  const { updateImpuestos, addImpuestos, getTipoImpuestosDB,TipoImpuestosDB } = useImpuestos();
+  
   useEffect(() => {
-    getPropiedadesDB();
+    getTipoImpuestosDB();
   }, []);
   const formik = useFormik({
     // Inicializa los valores del formulario con los valores iniciales proporcionados por la función initialValues
@@ -32,8 +30,8 @@ export default function AddEditForm(props) {
     onSubmit: async (formValue) => {
       try {
         // Si se proporciona un objeto se actualiza, de lo contrario se crea uno nuevo
-        if (Data) await updateVisitantes(Data.id_ingreso, formValue);
-        else await addVisitantes(formValue);
+        if (Data) await updateImpuestos(Data.id_ingreso, formValue);
+        else await addImpuestos(formValue);
 
         // Llama a la función onRefetch para actualizar la lista
         onRefetch();
@@ -53,30 +51,26 @@ export default function AddEditForm(props) {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            id="pais"
-            name="pais"
-            label="País"
-            variant="outlined"
-            value={formik.values.pais}
-            onChange={formik.handleChange}
-            error={formik.touched.pais && Boolean(formik.errors.pais)}
-            helperText={formik.touched.pais && formik.errors.pais}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
+        
+        
+        <Grid item xs={12} md={12}>
+          <Autocomplete
             fullWidth
             id="tipo_impuesto"
-            name="tipo_impuesto"
-            label="Tipo de Impuesto"
-            variant="outlined"
-            value={formik.values.tipo_impuesto}
-            onChange={formik.handleChange}
-            error={formik.touched.tipo_impuesto && Boolean(formik.errors.tipo_impuesto)}
-            helperText={formik.touched.tipo_impuesto && formik.errors.tipo_impuesto}
+            options={TipoImpuestosDB}
+            getOptionLabel={(option) => `${option.tipo_impuesto} `}
+            value={TipoImpuestosDB?.find((tipo) => tipo.id_tipoimpuesto === formik.values?.tipo_impuesto) || null}
+            onChange={(_, value) => formik.setFieldValue("tipo_impuesto", value?.id_tipoimpuesto || "")}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Tipo de Impuesto"
+                variant="outlined"
+                error={formik.touched.tipo_impuesto && Boolean(formik.errors.tipo_impuesto)}
+                helperText={formik.touched.tipo_impuesto && formik.errors.tipo_impuesto}
+                sx={{ background: "#fcfcfc" }}
+              />
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
@@ -173,14 +167,14 @@ export default function AddEditForm(props) {
 
 function initialValues(data) {
   return {
-    pais: data?.pais || "",
+ 
     tipo_impuesto: data?.tipo_impuesto || "",
     cuenta_venta: data?.cuenta_venta || "",
     cuenta_compra: data?.cuenta_compra || "",
     cuenta_dev_compra: data?.cuenta_dev_compra || "",
     cuenta_dev_venta: data?.cuenta_dev_venta || "",
     valor_impuesto: data?.valor_impuesto || "",
-   
+
     estado: data?.estado || true,
     // Add other fields here based on your model
   };
@@ -190,7 +184,7 @@ function newSchema() {
   const requiredMessage = "Este campo es requerido";
 
   return {
-    pais: Yup.string().required(requiredMessage),
+ 
     tipo_impuesto: Yup.string().required(requiredMessage),
     cuenta_venta: Yup.string().required(requiredMessage),
     cuenta_compra: Yup.string().required(requiredMessage),

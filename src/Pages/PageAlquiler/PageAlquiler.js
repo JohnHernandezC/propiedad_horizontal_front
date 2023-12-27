@@ -13,7 +13,6 @@ import dayjs from 'dayjs';
 const Columns = [
   { id: "id_usuario", label: "Usuario" },
   { id: "id_propiedad", label: "ID Propiedad" },
-  { id: "fecha_registro", label: "Fecha de Registro"},
   { id: "fecha_separacion", label: "Fecha de Separación", render: (value) => (
     value ? dayjs(value).format('YYYY-MM-DD HH:mm:ss') : ''
   )},

@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
-import { Tree, TreeNode } from "react-organizational-chart";
-import PUC_COL_2023 from './PUC_COL_2023.json';
-import {
-  Autocomplete,
-  TextField,
-  Grid,
-  Card,
-  CardHeader,
-  Avatar,
-  IconButton,
-  Tooltip,
-  Badge,
-  CardContent,
-  Typography
-} from "@mui/material";
 import {
   makeStyles
 } from "@material-ui/core/styles";
+import {
+  Autocomplete,
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  TextField,
+  Typography
+} from "@mui/material";
+import { useState } from 'react';
+import { Tree, TreeNode } from "react-organizational-chart";
+import PUC_COL_2023 from './PUC_COL_2023.json';
 
-import BusinessIcon from "@mui/icons-material/Business";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 
@@ -120,7 +115,7 @@ const PagePucEdificio = () => {
   };
   
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} style={{ height: '100%', width: '100%' }}>
       {/* Selector de Clase */}
       <Grid item xs={3}>
         <Autocomplete
@@ -188,11 +183,12 @@ const PagePucEdificio = () => {
       )}
   
       {/* Representación en forma de árbol */}
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{ height: '100%', width: '100%' }}>
         {renderTree()}
       </Grid>
     </Grid>
   );
+  
           };
 
 export default PagePucEdificio;

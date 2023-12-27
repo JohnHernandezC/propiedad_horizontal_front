@@ -28,6 +28,9 @@ import { PageBancosEdificio } from 'src/Pages/pageBancosEdificio/PageBancosEdifi
 import { PageTipoPropiedad } from 'src/Pages/PageTipoPropiedad/PageTipoPropiedad';
 import { PageConfiCuentas } from 'src/Pages/PageConfiCuentas/PageConfiCuentas';
 import { PageProveedores } from 'src/Pages/PageProveedores/PageProveedores';
+import { PageTipoDocumento } from 'src/Pages/PageTipoDocumento/PageTipoDocumento';
+import { PageAsientoDiario } from 'src/Pages/pageAsientoDiario/pageAsientoDiario';
+import PagePublicaciones from 'src/Pages/PagePublicaciones/PagePublicaciones';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -56,6 +59,9 @@ export default function Router() {
         { path: 'propiedad/tipo', element: <PageTipoPropiedad /> },
         { path: 'conficuentas', element: <PageConfiCuentas /> },
         { path: 'proveedores', element: <PageProveedores /> },
+        { path: 'documento/tipo', element: <PageTipoDocumento /> },
+        { path: 'asiento/diario', element: <PageAsientoDiario /> },
+        { path: 'posts', element: <PagePublicaciones /> },
        
         
        

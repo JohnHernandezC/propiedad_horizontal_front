@@ -9,7 +9,11 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Tooltip,
+  IconButton
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import useResponsive from "../../hooks/useResponsive";
 import Scrollbar from "../scrollbar";
 import { CardsBase } from "./Cards";
@@ -84,59 +88,60 @@ export const CustomTable = ({ columns, data, handleEdit, handleDelete }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.length > 0 ? ( // Verifica si data es un array con al menos un elemento
-                  data.map((item) => (
-                    <TableRow key={item.id}>
-                      {columns.map((column) => (
-                        <TableCell key={column.id}>
-                          {column.render
-                            ? column.render(item[column.id])
-                            : item[column.id]}
-                        </TableCell>
-                      ))}
-                      <TableCell>
-                        {handleEdit && (
-                          <Button
-                            variant="contained"
-                            sx={{
-                              backgroundColor: "#880606", // Dark red
-                              color: "#fcfcfc", // White
-                              "&:hover": {
-                                backgroundColor: "#d53d0c", // Lighter red on hover
-                              },
-                            }}
-                            onClick={() => handleEdit(item)}
-                          >
-                            {'Editar'}
-                          </Button>
-                        )}
-                        {handleDelete && (
-                          <Button
-                            variant="contained"
-                            sx={{
-                              backgroundColor: "#d53d0c", // Lighter red
-                              color: "#fcfcfc", // White
-                              "&:hover": {
-                                backgroundColor: "#ff8207", // Orange on hover
-                              },
-                            }}
-                            onClick={() => handleDelete(item)}
-                          >
-                            {'Delete'}
-                          </Button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  // Si data no es un array o está vacío, muestra un mensaje de error o estado vacío
-                  <TableRow>
-                    <TableCell colSpan={columns.length + 1}>
-                      No data available.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
+  {data?.length > 0 ? (
+    data.map((item) => (
+      <TableRow key={item.id}>
+        {columns.map((column) => (
+          <TableCell key={column.id}>
+            {column.render
+              ? column.render(item[column.id])
+              : item[column.id]}
+          </TableCell>
+        ))}
+        <TableCell>
+          {handleEdit && (
+            <Tooltip title="Editar">
+              <IconButton
+                sx={{
+                  backgroundColor: "#880606", // Dark red
+                  color: "#fcfcfc", // White
+                  "&:hover": {
+                    backgroundColor: "#d53d0c", // Lighter red on hover
+                  },
+                }}
+                onClick={() => handleEdit(item)}
+              >
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {handleDelete && (
+            <Tooltip title="Eliminar">
+              <IconButton
+                sx={{
+                  backgroundColor: "#d53d0c", // Lighter red
+                  color: "#fcfcfc", // White
+                  "&:hover": {
+                    backgroundColor: "#ff8207", // Orange on hover
+                  },
+                }}
+                onClick={() => handleDelete(item)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={columns.length + 1}>
+        No hay datos disponibles.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
             </Table>
           </TableContainer>
         </Scrollbar>

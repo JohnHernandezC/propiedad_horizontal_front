@@ -1,7 +1,11 @@
 import {BASE_API_PUBLIC } from "../../utils/constants";
 import { makeRequest } from "../Request";
 const BASE_URL = `${BASE_API_PUBLIC}/`;
-
+  // Función para obtener los datos 
+  export async function getTipoImpuestosApi(token) {
+    let url = `${BASE_URL}api/TipoImpuestos`;
+    return makeRequest(url, "GET", token);
+  } 
   // Función para obtener los datos 
   export async function getImpuestosApi(token) {
     let url = `${BASE_URL}api/Impuestos`;

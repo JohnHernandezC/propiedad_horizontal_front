@@ -7,17 +7,22 @@ import { CustomTable } from "../../components/common/Table";
 import { ModalBasic } from "../../components/modal/ModalBasic";
 import { HeaderPage } from "../HeaderPage";
 import AddEditForm from "./components/AddEditForm";
+import { CheckCircle, Cancel } from '@mui/icons-material';
 
 const Columns = [
-    { id: "pais", label: "País" },
     { id: "tipo_impuesto", label: "Tipo de Impuesto" },
     { id: "cuenta_venta", label: "Cuenta de Venta" },
     { id: "cuenta_compra", label: "Cuenta de Compra" },
     { id: "cuenta_dev_compra", label: "Cuenta de Devolución de Compra" },
     { id: "cuenta_dev_venta", label: "Cuenta de Devolución de Venta" },
     { id: "valor_impuesto", label: "Valor de Impuesto" },
-    { id: "fecha_resgistro", label: "Fecha de Registro" },
-    { id: "estado", label: "Estado" }
+    { id: "estado", label: "Estado", render: (value) => (
+      value ? (
+        <CheckCircle color="primary" />
+      ) : (
+        <Cancel color="error" />
+      )
+    )},
   ];
   
 

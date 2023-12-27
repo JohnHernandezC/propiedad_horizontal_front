@@ -2,68 +2,45 @@ import { Container } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useGestionDocumental } from 'src/hooks/GestionDocumentalHooks/useGestionDocumental';
+import { useAsientoDiario } from 'src/hooks/AsientoDiarioHooks/useAsientoDiario';
 import { CustomTable } from "../../components/common/Table";
 import { ModalBasic } from "../../components/modal/ModalBasic";
 import { HeaderPage } from "../HeaderPage";
 import AddEditForm from "./components/AddEditForm";
 import { CheckCircle, Cancel } from '@mui/icons-material';
-import dayjs from 'dayjs';
-import { IconButton } from "@mui/material";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-
-// ...
 
 const Columns = [
-  { id: "tipo_doc", label: "Tipo de Documento" },
-  { id: "num_doc", label: "Número de Documento" },
-  { id: "Descripcion", label: "Descripción" },
-  { id: "Observacion", label: "Observación" },
-  {
-    id: "archivo",
-    label: "Archivo",
-    render: (value) => (
-      value ? (
-        <IconButton
-          component="a"
-          href={value}
-          target="_blank"
-          download
-          rel="noopener noreferrer"
-        >
-          <CloudDownloadIcon />
-        </IconButton>
-      ) : null
-    ),
-  },
-  {
-    id: "fecha_documento",
-    label: "Fecha del Documento",
-    render: (value) => (value ? dayjs(value).format("YYYY-MM-DD HH:mm:ss") : ""),
-  },
-  {
-    id: "estado",
-    label: "Estado",
-    render: (value) => (
+    { id: "id_edificio", label: "Edificio" },
+    { id: "consecutivo", label: "Consecutivo" },
+    { id: "tipoasiento", label: "Tipo de Asiento" },
+    { id: "fecha_comprobante", label: "Fecha del Comprobante" },
+    { id: "cuenta_contable", label: "Cuenta Contable" },
+    { id: "tercero", label: "Tercero" },
+    { id: "num_documento", label: "Número de Documento" },
+    { id: "debito", label: "Débito" },
+    { id: "credito", label: "Crédito" },
+    { id: "observacion", label: "Observación" },
+    { id: "soporte", label: "Soporte" },
+    { id: "estado", label: "Estado", render: (value) => (
       value ? (
         <CheckCircle color="primary" />
       ) : (
         <Cancel color="error" />
       )
-    ),
-  },
-];
-
+    )},
+  ];
   
 
 
 
-export   function PageGestionDocumental() {
+
+
+export   function PageAsientoDiario() {
     const [showModal, setShowModal] = useState(false);
     const [titleModal, setTitleModal] = useState(null);
     const [contentModal, setContentModal] = useState(null);
     const [refetch, setRefetch] = useState(false);
-    const { loading, GestionDocumental, getGestionDocumental } = useGestionDocumental();
+    const { loading, AsientoDiario, getAsientoDiario } = useAsientoDiario();
     
    
    
@@ -72,13 +49,13 @@ export   function PageGestionDocumental() {
     const onRefetch = useCallback(() => setRefetch((prev) => !prev), []);
   
     useEffect(() => {
-        getGestionDocumental();
+        getAsientoDiario();
     }, [refetch]);
   
     const MemoizedModalBasic = React.memo(ModalBasic);
   
     const handleAddClientes = useCallback(() => {
-      setTitleModal("Nuevo registro de gestion documental");
+      setTitleModal("Nuevo registro de Asiento Diario");
       setContentModal(
        <AddEditForm onClose={openCloseModal} onRefetch={onRefetch} />
       );
@@ -94,21 +71,19 @@ export   function PageGestionDocumental() {
       openCloseModal();
     }, [openCloseModal, onRefetch]);
   
-    const handleMarcarSalida = (id) => {
-      // Handle the delete action, you can use id to identify the entry
-    };
+   
     
   
     return (
       <>
         <Helmet>
-          <title>GestionDocumental</title>
+          <title>Asiento Diario</title>
         </Helmet>
   
         <Container maxWidth="xl">
         <HeaderPage
-            title="Gestion Documental"
-            btnTitle="Registro de GestionDocumental"
+            title="Asiento Diario"
+            btnTitle="Registro de AsientoDiario"
             icono="plus square icon"
             btnClick={handleAddClientes}
           />
@@ -118,7 +93,7 @@ export   function PageGestionDocumental() {
              <>
              <CustomTable 
              columns={Columns} 
-             data={GestionDocumental} 
+             data={AsientoDiario} 
              handleEdit={handleEdit} 
               />
   

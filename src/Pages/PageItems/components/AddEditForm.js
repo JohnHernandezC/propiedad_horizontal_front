@@ -5,18 +5,21 @@ import {
   FormControlLabel,
   Grid,
   TextField,
+  Autocomplete
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useItems } from "src/hooks/ItemsHooks/useItems";
 import * as Yup from "yup";
+import { useProveedores } from 'src/hooks/ProveedoresHooks/useProveedores';
 
 export default function AddEditForm(props) {
   const { onClose, onRefetch, Data } = props;
   const { updateItems, addItems } = useItems();
+  const {  ProveedoresDB, getProveedoresDB } = useProveedores();
 
   useEffect(() => {
-   
+    getProveedoresDB()
   }, []);
   const formik = useFormik({
     // Inicializa los valores del formulario con los valores iniciales proporcionados por la función initialValues
@@ -50,19 +53,25 @@ export default function AddEditForm(props) {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            fullWidth
-            id="tipo_producto"
-            name="tipo_producto"
-            label="Tipo de Producto"
-            variant="outlined"
-            value={formik.values.tipo_producto}
-            onChange={formik.handleChange}
-            error={formik.touched.tipo_producto && Boolean(formik.errors.tipo_producto)}
-            helperText={formik.touched.tipo_producto && formik.errors.tipo_producto}
-          />
-        </Grid>
+      <Grid item xs={12} sm={4}>
+  <Autocomplete
+    fullWidth
+    id="tipo_producto"
+    name="tipo_producto"
+    options={['Consumo', 'Venta', 'Servicio']}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        label="Tipo de Producto"
+        variant="outlined"
+        error={formik.touched.tipo_producto && Boolean(formik.errors.tipo_producto)}
+        helperText={formik.touched.tipo_producto && formik.errors.tipo_producto}
+      />
+    )}
+    value={formik.values.tipo_producto}
+    onChange={(_, value) => formik.setFieldValue("tipo_producto", value || "")}
+  />
+</Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             fullWidth
@@ -184,17 +193,25 @@ export default function AddEditForm(props) {
             helperText={formik.touched.impuesto_retencion && formik.errors.impuesto_retencion}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
+        
+        <Grid item xs={12} md={6}>
+          <Autocomplete
             fullWidth
             id="nit_proveedor"
-            name="nit_proveedor"
-            label="NIT del Proveedor"
-            variant="outlined"
-            value={formik.values.nit_proveedor}
-            onChange={formik.handleChange}
-            error={formik.touched.nit_proveedor && Boolean(formik.errors.nit_proveedor)}
-            helperText={formik.touched.nit_proveedor && formik.errors.nit_proveedor}
+            options={ProveedoresDB}
+            getOptionLabel={(option) => `${option.nom_proveedor} (${option.nit_proveedor})`}
+            value={ProveedoresDB?.find((user) => user.id_proveedor === parseInt(formik.values?.nit_proveedor)) || null}
+            onChange={(_, value) => formik.setFieldValue("nit_proveedor", value?.id_proveedor || "")}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="NIT del Proveedor"
+                variant="outlined"
+                error={formik.touched.nit_proveedor && Boolean(formik.errors.nit_proveedor)}
+                helperText={formik.touched.nit_proveedor && formik.errors.nit_proveedor}
+                sx={{ background: "#fcfcfc" }}
+              />
+            )}
           />
         </Grid>
         

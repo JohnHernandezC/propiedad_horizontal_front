@@ -48,7 +48,7 @@ export default function AddEditForm(props) {
       }
     },
   });
-
+  console.log("propiedasd",formik.values);
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid container spacing={2}>
@@ -77,7 +77,7 @@ export default function AddEditForm(props) {
             fullWidth
             id="id_propiedad"
             options={PropiedadesDB}
-            getOptionLabel={(option) => option.num_propiedad}
+            getOptionLabel={(option) =>  `${option.tipo_propiedad} (${option.num_propiedad})`}
             value={PropiedadesDB?.find((propiedad) => propiedad.id_propiedad === formik.values?.id_propiedad) || null}
             onChange={(_, value) => formik.setFieldValue("id_propiedad", value?.id_propiedad || "")}
             renderInput={(params) => (
@@ -177,6 +177,7 @@ export default function AddEditForm(props) {
 function initialValues(data) {
   return {
     id_usuario: data?.id_usuario || "",
+    id_propiedad: data?.id_propiedad || "",
     fecha_separacion: data?.fecha_separacion ? dayjs(data.fecha_separacion) : null,
     fecha_entrega: data?.fecha_entrega ? dayjs(data.fecha_entrega) : null,
 
